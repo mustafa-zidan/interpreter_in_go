@@ -10,13 +10,13 @@ import (
 
 func TestNextOK(t *testing.T) {
 	input := strings.NewReader(`let five = 5;
-		let ten = 10
+		let ten = 10;
 
 		let add = fn(x, y) {
 			x + y;
-		}
+		};
 
-		let result = add(five, ten)
+		let result = add(five, ten);
 		`)
 	tests := []struct {
 		expectedType    token.TokenType
@@ -37,7 +37,7 @@ func TestNextOK(t *testing.T) {
 		{token.LET, "let"},
 		{token.IDENT, "add"},
 		{token.ASSIGN, "="},
-		{token.FUNCTION, "func"},
+		{token.FUNCTION, "fn"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},
 		{token.COMMA, ","},
@@ -48,23 +48,26 @@ func TestNextOK(t *testing.T) {
 		{token.PLUS, "+"},
 		{token.IDENT, "y"},
 		{token.SIMICOLON, ";"},
-		{token.RPAREN, "}"},
+		{token.RBRACE, "}"},
+		{token.SIMICOLON, ";"},
 
 		{token.LET, "let"},
 		{token.IDENT, "result"},
 		{token.ASSIGN, "="},
 		{token.IDENT, "add"},
 		{token.LPAREN, "("},
-		{token.IDENT, "x"},
+		{token.IDENT, "five"},
 		{token.COMMA, ","},
-		{token.IDENT, "y"},
+		{token.IDENT, "ten"},
 		{token.RPAREN, ")"},
+		{token.SIMICOLON, ";"},
+		{token.EOF, "\x00"},
 	}
 	l := New("test.moose", input)
 	for _, tt := range tests {
 		tok := l.Next()
-		assert.Equal(t, tok.Type, tt.expectedType)
-		assert.Equal(t, tok.Literal, tt.expectedLiteral)
+		assert.Equal(t, tt.expectedType, tok.Type)
+		assert.Equal(t, tt.expectedLiteral, tok.Literal)
 	}
 }
 

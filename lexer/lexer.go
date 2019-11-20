@@ -6,18 +6,16 @@ import (
 	"log"
 	"os"
 	"unicode"
-	"unicode/utf8"
 
 	"github.com/mustafa-zidan/interpreter_in_go/token"
 )
 
 type Lexer struct {
-	reader       *bufio.Reader // buffer of strings
-	file         string        // current file name
-	line         int           // Line number
-	position     int           // current position in the input
-	readPosition int           // current reading position after the current char
-	char         rune
+	reader   *bufio.Reader // buffer of strings
+	file     string        // current file name
+	line     int           // Line number
+	position int           // current position in the input
+	char     rune
 }
 
 func New(file string, reader io.Reader) *Lexer {
@@ -26,11 +24,11 @@ func New(file string, reader io.Reader) *Lexer {
 	return l
 }
 
-//Next get next Token
+// Next get next Token
 func (l *Lexer) Next() *token.Token {
 	var t token.Token
 
-	l.skipWhiteSpace()
+	l.eatWhiteSpaces()
 
 	switch l.char {
 	case '=':
@@ -59,7 +57,7 @@ func (l *Lexer) Next() *token.Token {
 			t.Literal = l.readIdentifier()
 			t.Type = token.INT
 		} else {
-			log.Fatalf("Error in %s line %d : Illegal charachter %v\n", l.file, l.line, l.char)
+			log.Fatalf("Error in %s line %d column: %d : Illegal charachter %v\n", l.file, l.line, l.position, l.char)
 			t = newToken(token.ILLEGAL, l.char)
 		}
 	}
@@ -73,14 +71,20 @@ func newToken(tokenType token.TokenType, char rune) token.Token {
 
 func (l *Lexer) readIdentifier() string {
 	r := make([]rune, 0)
-	for !unicode.IsSpace(l.char) {
-		l.readChar()
+	for unicode.IsOneOf(token.AllowedIdentChars, l.char) {
 		r = append(r, l.char)
+		l.readChar()
+	}
+	// reset the the last character
+	err := l.reader.UnreadRune()
+	if err != nil {
+		log.Fatalf("Error in %s line %d column: %d : unknown error %v\n", l.file, l.line, l.position, err)
+		os.Exit(1)
 	}
 	return string(r)
 }
 
-func (l *Lexer) skipWhiteSpace() {
+func (l *Lexer) eatWhiteSpaces() {
 	for unicode.IsSpace(l.char) {
 		l.readChar()
 	}
@@ -89,19 +93,20 @@ func (l *Lexer) skipWhiteSpace() {
 // read current character and set the charachter position
 func (l *Lexer) readChar() {
 	var err error
-	l.char, _, err = l.reader.ReadRune()
+	var n int
+	l.char, n, err = l.reader.ReadRune()
 	if err != nil {
 		if err == io.EOF {
 			l.char = rune(0)
 		} else {
-			//TODO log reader and error
-			log.Fatalf("Error in %s line %d :%v\n", l.file, l.line, err)
+			log.Fatalf("Error in %s line %d column: %d :%v\n", l.file, l.line, l.position, err)
 			os.Exit(1)
 		}
 	} else if l.char == '\n' {
 		l.line++
-		l.position, l.readPosition = 0, 0
+		l.position = 0
+		l.readChar()
 	} else {
-		l.position, l.readPosition = l.readPosition, l.readPosition+utf8.RuneLen(l.char)
+		l.position += n
 	}
 }
