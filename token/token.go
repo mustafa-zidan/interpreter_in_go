@@ -22,23 +22,24 @@ const (
 	INT   = "INT"   //123456789
 
 	//Operators
-	ASSIGN     = "="
-	PLUS       = "+"
-	MINUS      = "-"
-	MULTIPLY   = "*"
-	DEVID      = "/"
-	PERCENTAGE = "%"
-	GT         = ">"
-	GTE        = ">="
-	LT         = "<"
-	LTE        = "<="
-	AND        = "&"
-	BAND       = "&&"
-	OR         = "|"
-	BOR        = "||"
-	EQUAL      = "=="
-	NEQUAL     = "!="
-	BANG       = "!"
+	ASSIGN   = "="
+	PLUS     = "+"
+	MINUS    = "-"
+	ASTERISK = "*"
+	SLASH    = "/"
+	PERCENT  = "%"
+	GT       = ">"
+	GTE      = ">="
+	LT       = "<"
+	LTE      = "<="
+	AND      = "&"
+	BAND     = "&&"
+	OR       = "|"
+	BOR      = "||"
+	EQ       = "=="
+	NE       = "!="
+	BANG     = "!"
+	DPLUS    = "++"
 
 	//Delimiters
 	COMMA     = ","
@@ -53,18 +54,32 @@ const (
 	//Keywords
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
+	IF       = "IF"
+	ELSE     = "ELSE"
+	SWITCH   = "SWITCH"
+	CASE     = "CASE"
+	DEFAULT  = "DEFAULT"
+	RETURN   = "RETURN"
+	TRUE     = "TRUE"
+	FALSE    = "FALSE"
+	FOR      = "FOR"
+	BREAK    = "BREAK"
 )
 
 var (
 	keywords = map[string]TokenType{
-		"fn":  FUNCTION,
-		"let": LET,
-		"<=":  LTE,
-		">=":  GTE,
-		"&&":  BAND,
-		"||":  BOR,
-		"==":  EQUAL,
-		"!=":  NEQUAL,
+		"fn":      FUNCTION,
+		"let":     LET,
+		"if":      IF,
+		"else":    ELSE,
+		"return":  RETURN,
+		"switch":  SWITCH,
+		"case":    CASE,
+		"default": DEFAULT,
+		"break":   BREAK,
+		"true":    TRUE,
+		"false":   FALSE,
+		"for":     FOR,
 	}
 	//Allowed Identifier CharSet =
 	AllowedIdentChars = []*unicode.RangeTable{unicode.Letter, unicode.Number, rangetable.New('.', '_')}
