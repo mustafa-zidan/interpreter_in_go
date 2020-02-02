@@ -6,8 +6,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/mustafa-zidan/interpreter_in_go/lexer"
-	"github.com/mustafa-zidan/interpreter_in_go/token"
+	"moose/lexer"
+	"moose/token"
 )
 
 const PROMPT = ">_"

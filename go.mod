@@ -1,4 +1,4 @@
-module github.com/mustafa-zidan/interpreter_in_go
+module moose
 
 go 1.13
 

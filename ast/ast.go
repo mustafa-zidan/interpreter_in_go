@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/mustafa-zidan/interpreter_in_go/token"
+import "moose/token"
 
 type Node interface {
 	TokenLiteral() string
@@ -17,7 +17,7 @@ type Expression interface {
 }
 
 type Program struct {
-	Statments []Statement
+	Statements []Statement
 }
 
 func (p *Program) TokenLiteral() string {
@@ -35,5 +35,18 @@ type LetStatement struct {
 }
 
 func (ls *LetStatement) TokenLiteral() string {
-	return token.LET
+	return ls.Token.Literal
 }
+
+func (ls *LetStatement) statementNode() {}
+
+type Identifier struct {
+	Token token.Token
+	Value string
+}
+
+func (i *Identifier) TokenLiteral() string {
+	return i.Token.Literal
+}
+
+func (i *Identifier) expressionNode() {}

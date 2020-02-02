@@ -4,7 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mustafa-zidan/interpreter_in_go/token"
+	"moose/token"
+
 	"github.com/stretchr/testify/assert"
 )
 

@@ -29,7 +29,7 @@ build:
 	@echo "Compiling..."
 	@mkdir -p ./bin
 	@gox -output "bin/{{.Dir}}_${VERSION}_{{.OS}}_{{.Arch}}" -os="linux" -os="darwin" -arch="386" -arch="amd64" ./
-	@go build -i -o ./bin/simscale
+	@go build -i -o ./bin/moose
 	@echo "All done! The binaries are in ./bin Check it out!"
 
 vet: ## run go vet

@@ -7,7 +7,7 @@ import (
 	"os"
 	"unicode"
 
-	"github.com/mustafa-zidan/interpreter_in_go/token"
+	"moose/token"
 )
 
 type Lexer struct {
