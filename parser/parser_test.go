@@ -36,7 +36,7 @@ func TestLetStatment(t *testing.T) {
 
 	for i, test := range tests {
 		statement := program.Statements[i]
-		assert.IsType(t, *ast.LetStatement{}, statement)
+		assert.IsType(t, &ast.LetStatement{}, statement)
 		ls := statement.(*ast.LetStatement)
 		assert.Equal(t, "let", ls.TokenLiteral())
 		assert.Equal(t, test.expectedIdentifier, ls.Name.Value)

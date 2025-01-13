@@ -27,5 +27,5 @@ func (p *Parser) nextToken() {
 }
 
 func (p *Parser) ParseProgram() *ast.Program {
-	return nil
+	return ast.NewProgram()
 }
